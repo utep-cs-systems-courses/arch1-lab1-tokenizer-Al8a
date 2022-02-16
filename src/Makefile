@@ -1,14 +1,16 @@
 # List of object files
 OBJS = history.o tokenizer.o 	  	# recursive assignment '=' - evaluated everytime the variable is encountered
-OBJS_MAIN := $(OBJS) uimain.o		# Simple assignment ':=' - evaluated only once at its very first occurrence.
-OBJS_TEST := $(OBJS) tester.o
+OBJS_MAIN = $(OBJS) uimain.o		# Simple assignment ':=' - evaluated only once at its very first occurrence.
+OBJS_TEST = $(OBJS) tester.o
 
+# Compiler flags -g debug  -O3 optimization 
 CFLAGS=-g -O3
 
-tokenizer.o uimain.o: tokenizer.o
+#include file dependencies
+tokenizer.o uimain.o: tokenizer.h
 history.o uimain.o: history.h
 
-# user input version 
+# user input implementation 
 tokenizer: $(OBJS_MAIN)
 	cc -o tokenizer $(CFLAGS) $(OBJS_MAIN)
 
@@ -19,7 +21,7 @@ tokenizer_test: $(OBJS_TEST)
 all: tokenizer
 
 clean:
-	rm -f *.o tokenizer
+	rm -f *.o *.c~ *.h~ *~ *.c# *.h# src
 
 run: tokenizer
 	./tokenizer

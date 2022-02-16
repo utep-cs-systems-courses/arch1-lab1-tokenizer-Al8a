@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tokenizer.h"
-
+#include "history.h"
 
 
 int space_char(char c)
@@ -31,12 +31,26 @@ char *word_start(char *str)
     ++(*ptr)    value pre-incremented
     (*ptr)++    value post-incremented
   */
+
+
+  /*
+  char *ptr = str;
+  if(!*ptr){
+    return 0;
+  }
+  while(*ptr){
+    if(!space_char(*ptr)){
+      return ptr;
+    }
+    else ++ptr;
+  }
+  */
   
   do{
     if(non_space_char(*str)){
       return str;
     }   
-  }while(*(++str) != '\0');  // pre-increment pointer address
+  }while(*(++str) != '\0'); 
   return 0;
 }  
 
@@ -44,8 +58,16 @@ char *word_start(char *str)
 
 char *word_terminator(char *word)
 {
+  /*
+  char *ptr = word;
+  while(!space_char(*ptr) && *ptr != '\0') {
+    ++ptr;
+  }
+  return ptr;
+  */
+  
   while(1){
-    if(!non_space_char(*word))      // check for '\0'
+    if(!non_space_char(*word))     
       return word;                 
     word++; 
   }
@@ -54,28 +76,55 @@ char *word_terminator(char *word)
 
 
 
-
 int count_words(char *str)
 {
-
   int word_count = 0;
   char in_word = 0;
+  char *ptr = str;
 
-  do{
+  /*
+  while(*ptr){
+    if(space_char(*ptr)){
+      in_word = 0;
+      while(space_char(*ptr)){
+	++ptr;
+      }
+    }
+    else{
+      if(!in_word && non_space_char(*ptr)){
+	in_word = 1;
+	word_count++;
+      }
+      ++ptr;
+    }
+  }
+  return word_count;
+  */
+  
+  /*
+  while((*(++str) != '\0')){
     if(in_word && space_char(*str)){
       in_word = 0;
     }
-    // if word detected  
-    else if(!in_word && non_space_char(*str)) {
+    else if(!in_word && non_space_char(*str)){
       in_word = 1;
       word_count++;
     }
-
-  }while(*(++str) != '\0');  // pre-incrmement str's address 
-
+  }
   return word_count;
-}
+  */
 
+  do{
+    if(in_word && space_char(*ptr)){
+      in_word = 0;
+    }  
+    else if(!in_word && non_space_char(*ptr)) {
+      in_word = 1;
+      word_count++;
+    }
+  }while(*(++ptr) != '\0');  // pre-incrmement str's address 
+  return word_count;  
+}
 
 
 char *copy_str(char *in_str, short len)
@@ -132,13 +181,27 @@ char **tokenize(char* str)
 }
 
 
-
 void print_tokens(char **tokens)
 {
+
+  char** token = tokens;
+
+  /*
+  printf("{\n");
+  while(token){
+    printf("}\n\n");
+    ++token;
+  }
+  printf("}\n\n");
+  */
+  
+  
+  printf("{\n");
   for(char** token = tokens; *token != 0; token++){
     printf("\t%ld) '%s'\n", token - tokens, *token);
   }
-  printf("\n");
+  printf("}\n\n");
+  
 }
 
 
@@ -146,6 +209,16 @@ void free_tokens(char **tokens)
 {
   char **token = tokens;
 
+  /*
+  while(*token){
+    free(*token);
+    ++token;
+  }
+  free(*token); // free final token 
+  free(tokens); // free array of pointers 
+  */
+
+  
   while(*token != 0){
     free(*token);
     token++;
