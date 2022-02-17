@@ -9,7 +9,7 @@
 static void process_input(char *user_input, List *history, int history_length){
 
   // display history
-  if(user_input[1] == ' ' || user_input[1] == '\0' || user_input[1] == 'h' || user_input[0] == '!'){
+  if(user_input[1] == ' ' || user_input[1] == '\0' || user_input[1] == 'h'){
     printf("\t---- HISTORY ----\n");
     print_history(history);
     printf("\t-----------------\n");
@@ -18,6 +18,7 @@ static void process_input(char *user_input, List *history, int history_length){
   // quit command
   else if(user_input[1] == 'q'){
     free_history(history);
+    puts("---- NOW EXITING TOKENIZER ----\n");
     exit(EXIT_SUCCESS);
   }
   
