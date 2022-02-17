@@ -7,8 +7,8 @@ OBJS_TEST = $(OBJS) tester.o
 CFLAGS=-g -O3
 
 #include file dependencies
-tokenizer.o uimain.o: tokenizer.h
-history.o uimain.o: history.h
+tokenizer.h: tokenizer.o uimain.o
+history.h: history.o uimain.o
 
 # user input implementation 
 tokenizer: $(OBJS_MAIN)
