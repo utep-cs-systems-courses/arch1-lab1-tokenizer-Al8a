@@ -27,7 +27,8 @@ char *word_start(char *str)
     *ptr++ == *(ptr++)  post-increment pointer address
     *++ptr == *(++ptr)  pre-incremrent pointer address
 
-    ++*ptr      value pre-incremented  
+    ++*ptr     
+ value pre-incremented  
     ++(*ptr)    value pre-incremented
     (*ptr)++    value post-incremented
   */
@@ -71,7 +72,7 @@ int count_words(char *str)
   while(*str != '\0'){
     str = word_start(str);
     str = word_terminator(str);
-    ++word_count;
+    word_count++;
   }
   return word_count;
 }
@@ -80,13 +81,6 @@ int count_words(char *str)
 char *copy_str(char *in_str, short len)
 {
   char *out_str = (char*) malloc(sizeof(char) * (len + 1));
-
-  // error handling 
-  if(!out_str){
-    fprintf(stderr, "Method: *copy_str\nError: Memory allocation error!"); // stderr = standard error 
-    exit(EXIT_FAILURE);                                                    // fprintf(<file>,message)
-  }                                                                        // exit(EXIT_FAILURE) == exit(1)
-
   char *copy = out_str;  
 
   for(int i = 0; i < len; i++){
@@ -133,7 +127,7 @@ void print_tokens(char **tokens)
 {
   int count = 0;
   while(*tokens != 0){
-    printf("[%d]\t\'%s\'\n",count, *tokens);
+    printf("[%d]\t%s\n",count, *tokens);
     count++;
     tokens++;   
   }
