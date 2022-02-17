@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
 #include "history.h"
 #include "tokenizer.h"
 
@@ -7,6 +8,7 @@
 List* init_history()
 {
   List *list = (List*) calloc(1, sizeof(List));
+
   if(!list){
     fprintf(stderr,"Method: init_history\nError: Memory allocation error!");
     exit(EXIT_FAILURE);
@@ -18,51 +20,54 @@ List* init_history()
 
 void add_history(List *list, char *str)
 {
-  
-  int len;
-  Item *current_item = list->root;
   Item *new_item = (Item*) malloc(sizeof(Item));
-  new_item->next = 0; 
-
-  if(!new_item){
-    fprintf(stderr,"Method: init_history\nError: Memory allocation error!");
-    exit(EXIT_FAILURE);
+  Item *item = list->root;
+  Item *previous_item;
+  int index;
+  
+  /*
+  int str_length = 0;
+  while(*str != 0){
+    str_length++;
+    str++;
   }
+  */
 
-  len = 0;
-  while(*str != '\0'){
-    ++len;
-    ++str;
-  }
-
-  if(current_item == 0){
+  new_item -> str = copy_str(str, strlen(str));
+  
+  
+  // if history is empty set new_item to head node 
+  if(!item){
     list->root = new_item;
-    new_item->id = 0;
+    new_item->id = 1;
   }
+  
   else{
-    while(current_item->next != 0){
-      current_item =  current_item->next;
-    }
-    current_item->next = new_item;
-    new_item->id = current_item->id + 1;
-  }
 
-  str = str-len;
-  char *copied_string =(char*) malloc(sizeof(char));
-  copied_string= copy_str(str,len);
-  new_item->str = copied_string;
+    index = 0;    
+
+    while(item){
+      previous_item = item;
+      item = item->next;
+      index++;
+    }
+    
+    previous_item->next = new_item;
+    new_item->id = index + 1;
+  }
 }
 
 
 
 char *get_history(List *list, int id)
 {
-  Item* item= list->root;
-  while(item){
-    if(item -> id == id){
-      return item->str;
+  Item *current_item= list->root;
+
+  while(current_item){
+    if(current_item->id == id){
+      return current_item->str;
     }
-    item = item->next;
+    current_item = current_item->next;
   }
 }
 
@@ -70,10 +75,11 @@ char *get_history(List *list, int id)
 
 void print_history(List *list)
 {
-  Item* item = list->root;
-  while(item){
-    printf("[%d]\t's'\n", item->id, item->str);
-    item = item->next;
+  Item *current_item = list->root;
+
+  while(current_item){
+    printf("[%d] - [\"%s\"] \n", current_item->id, current_item->str);
+    current_item = current_item->next;
   }
 }
 
@@ -81,12 +87,12 @@ void print_history(List *list)
 
 void free_history(List *list)
 {
-  Item *item = list->root;
+  Item *current_item = list->root;
   Item *prev_item;
 
-  while(item){
-    prev_item = item;
-    item = item->next;
+  while(current_item){
+    prev_item = current_item;
+    current_item = current_item->next;
 
     free(prev_item->str);    // free string
     free(prev_item);         // free node
