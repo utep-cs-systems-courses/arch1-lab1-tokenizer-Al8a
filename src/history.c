@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
 #include "history.h"
 #include "tokenizer.h"
-
 
 List* init_history()
 {
@@ -18,6 +16,17 @@ List* init_history()
 
 
 
+int str_len(char *str)
+{
+  char *ptr  = str;
+  while(ptr != "\0"){
+    ptr++;
+  }
+  return ptr-str;
+}
+
+
+
 void add_history(List *list, char *str)
 {
   Item *new_item = (Item*) malloc(sizeof(Item));
@@ -25,16 +34,9 @@ void add_history(List *list, char *str)
   Item *previous_item;
   int index;
   
-  /*
-  int str_length = 0;
-  while(*str != 0){
-    str_length++;
-    str++;
-  }
-  */
-
-  new_item -> str = copy_str(str, strlen(str));
   
+  int str_length = str_len(*str);
+  new_item -> str = copy_str(str, str_length);
   
   // if history is empty set new_item to head node 
   if(!item){
@@ -78,13 +80,10 @@ void print_history(List *list)
   Item *current_item = list->root;
 
   while(current_item){
-    printf("[%d] - [\"%s\"] \n", current_item->id, current_item->str);
+    printf("[%d] - %s\n", current_item->id, current_item->str);
     current_item = current_item->next;
   }
 }
-
-
-
 void free_history(List *list)
 {
   Item *current_item = list->root;
