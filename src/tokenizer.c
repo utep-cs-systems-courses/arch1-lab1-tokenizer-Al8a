@@ -32,104 +32,54 @@ char *word_start(char *str)
     (*ptr)++    value post-incremented
   */
 
-
-  /*
-  char *ptr = str;
-  if(!*ptr){
-    return 0;
-  }
-  while(*ptr){
-    if(!space_char(*ptr)){
-      return ptr;
-    }
-    else ++ptr;
-  }
-  */
-  
+    
   do{
     if(non_space_char(*str)){
       return str;
     }   
   }while(*(++str) != '\0'); 
   return 0;
+  
+  /*
+  if(*str == '\0'){
+    return 0;
+  }
+  while(space_char(*str)){
+      str++;
+  }
+  return str;
+  */
 }  
 
 
 
 char *word_terminator(char *word)
 {
-  /*
-  char *ptr = word;
-  while(!space_char(*ptr) && *ptr != '\0') {
-    ++ptr;
-  }
-  return ptr;
-  */
-  
-  while(1){
-    if(!non_space_char(*word))     
-      return word;                 
+  while(word != 0){
+    if(!non_space_char(*word)){     
+      return word;
+    }
     word++; 
   }
   return 0;
 }
 
 
-
 int count_words(char *str)
 {
   int word_count = 0;
-  char in_word = 0;
-  char *ptr = str;
-
-  /*
-  while(*ptr){
-    if(space_char(*ptr)){
-      in_word = 0;
-      while(space_char(*ptr)){
-	++ptr;
-      }
-    }
-    else{
-      if(!in_word && non_space_char(*ptr)){
-	in_word = 1;
-	word_count++;
-      }
-      ++ptr;
-    }
+  while(*str != '\0'){
+    str = word_start(str);
+    str = word_terminator(str);
+    ++word_count;
   }
   return word_count;
-  */
-  
-  /*
-  while((*(++str) != '\0')){
-    if(in_word && space_char(*str)){
-      in_word = 0;
-    }
-    else if(!in_word && non_space_char(*str)){
-      in_word = 1;
-      word_count++;
-    }
-  }
-  return word_count;
-  */
-
-  do{
-    if(in_word && space_char(*ptr)){
-      in_word = 0;
-    }  
-    else if(!in_word && non_space_char(*ptr)) {
-      in_word = 1;
-      word_count++;
-    }
-  }while(*(++ptr) != '\0');  // pre-incrmement str's address 
-  return word_count;  
 }
 
 
 char *copy_str(char *in_str, short len)
 {
-  char *out_str = (char*) malloc(sizeof(char) * len + 1);
+  char *out_str = (char*) malloc(sizeof(char) * (len + 1));
 
   // error handling 
   if(!out_str){
@@ -137,29 +87,27 @@ char *copy_str(char *in_str, short len)
     exit(EXIT_FAILURE);                                                    // fprintf(<file>,message)
   }                                                                        // exit(EXIT_FAILURE) == exit(1)
 
-  // temp pointer
-  char *c = out_str;  
-  short i = 0;
+  char *copy = out_str;  
 
-  while(i < len){                              
-      *c = *in_str;                 // dereference *in_str into out_str through *c 
+  for(int i = 0; i < len; i++){
+    *copy = *in_str;
 
-      if(*in_str == '\0')
-	break;
-     
-      i++;
-      c++;
-      in_str++;
-  } 
-  *c = '\0';                        // clear temp pointer 
-  return out_str;
+    if(*copy == '\0'){
+      break;
+    }
+    
+    copy++;
+    in_str++;
+  }
+  *copy = '\0';     // set last index to '\0' 
+  return out_str;   // return new character array with null character at end appended
 }
 
 
 char **tokenize(char* str)
 {
-  int words = count_words(str);
-  char **tokens = malloc(sizeof(char*) * (words + 1));  // string + '\0'
+  int word_count = count_words(str);
+  char **tokens = malloc(sizeof(char*) * (word_count + 1));
 
   // error handling 
   if(!tokens){
@@ -169,56 +117,33 @@ char **tokenize(char* str)
 
   str = word_start(str);
 
-  for(int i = 0; i < words; ++i){
+  for(int i = 0; i < word_count; ++i){
     char* terminator = word_terminator(str);
-    tokens[i] = copy_str(str, terminator - str);
+    tokens[i] = copy_str(str, terminator - str);    
     str = word_start(terminator);
   }
 
-  char **terminator = tokens + words;
-  *terminator = 0;
+  char **terminator = tokens + word_count;  // tokens[word_count-1] available indices          points out of bounds
+  *terminator = 0;                          // set zero pointer
   return tokens;
 }
 
 
 void print_tokens(char **tokens)
 {
-
-  char** token = tokens;
-
-  /*
-  printf("{\n");
-  while(token){
-    printf("}\n\n");
-    ++token;
+  int count = 0;
+  while(*tokens != 0){
+    printf("[%d]\t\'%s\'\n",count, *tokens);
+    count++;
+    tokens++;   
   }
-  printf("}\n\n");
-  */
-  
-  
-  printf("{\n");
-  for(char** token = tokens; *token != 0; token++){
-    printf("\t%ld) '%s'\n", token - tokens, *token);
-  }
-  printf("}\n\n");
-  
 }
 
 
 void free_tokens(char **tokens)
 {
   char **token = tokens;
-
-  /*
-  while(*token){
-    free(*token);
-    ++token;
-  }
-  free(*token); // free final token 
-  free(tokens); // free array of pointers 
-  */
-
-  
+ 
   while(*token != 0){
     free(*token);
     token++;
