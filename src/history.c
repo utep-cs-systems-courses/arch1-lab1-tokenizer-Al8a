@@ -15,14 +15,13 @@ List* init_history()
 }
 
 
-
 int str_len(char *str)
 {
-  char *ptr  = str;
-  while(ptr != "\0"){
+  char *ptr = str;
+  while(*ptr != '\0'){
     ptr++;
   }
-  return ptr-str;
+  return ptr - str;
 }
 
 
@@ -32,11 +31,15 @@ void add_history(List *list, char *str)
   Item *new_item = (Item*) malloc(sizeof(Item));
   Item *item = list->root;
   Item *previous_item;
-  int index;
-  
-  
-  int str_length = str_len(*str);
+  int index;  
+  int str_length =  str_len(str);
+
   new_item -> str = copy_str(str, str_length);
+
+  if(!new_item){
+    fprintf(stderr,"Method: add_history\nError: Memory allocation error!");
+    exit(EXIT_FAILURE);
+  }
   
   // if history is empty set new_item to head node 
   if(!item){
@@ -47,13 +50,11 @@ void add_history(List *list, char *str)
   else{
 
     index = 0;    
-
     while(item){
       previous_item = item;
       item = item->next;
       index++;
     }
-    
     previous_item->next = new_item;
     new_item->id = index + 1;
   }
@@ -64,7 +65,6 @@ void add_history(List *list, char *str)
 char *get_history(List *list, int id)
 {
   Item *current_item= list->root;
-
   while(current_item){
     if(current_item->id == id){
       return current_item->str;
@@ -78,12 +78,19 @@ char *get_history(List *list, int id)
 void print_history(List *list)
 {
   Item *current_item = list->root;
-
   while(current_item){
-    printf("[%d] - %s\n", current_item->id, current_item->str);
+
+    if(current_item->id == 1){
+      printf("[%d] - %s", current_item->id , current_item->str);
+    }
+    else{
+    printf("[%d] - %s", current_item->id, current_item->str);
+    }
     current_item = current_item->next;
+    
   }
 }
+
 void free_history(List *list)
 {
   Item *current_item = list->root;
