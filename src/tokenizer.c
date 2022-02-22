@@ -127,7 +127,8 @@ void print_tokens(char **tokens)
 {
   int count = 0;
   while(*tokens != 0){
-    printf("[%d]\t%s\n",count, *tokens);
+    printf("[%d]\t%s",count, *tokens);
+    printf("\n");
     count++;
     tokens++;   
   }

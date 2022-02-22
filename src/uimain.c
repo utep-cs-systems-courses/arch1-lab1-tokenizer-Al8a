@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include "history.h"
 #include "tokenizer.h"
-#define BUFFER_SIZE 100
+#define BUFFER_SIZE 300
 
 
 // if a '!' is read at user_input[0]
 static void process_input(char *user_input, List *history, int history_length){
 
   // display history
-  if(user_input[1] == ' ' || user_input[1] == '\0' || user_input[1] == 'h'){
+  if(user_input[1] == ' ' || user_input[1] == 'h'){
     printf("\t---- HISTORY ----\n");
     print_history(history);
     printf("\t-----------------\n");
@@ -56,7 +56,7 @@ int main()
   int history_length = 0;
   
   puts("\nWelcome to Tokenizer!\n");
-  puts("Available operations to run:\n\t1. Type and store a new string.\n\t2. '!<num>' To print a past entry.\n\t3. '!h'|'!' Display all previous entries.\n\t4. '!q' Quit Tokenizer\n");
+  puts("Available operations to run:\n\t1. Type and store a new string.\n\t2. '!<num>' To print a past entry.\n\t3. '!h' Display all previous entries.\n\t4. '!q' Quit Tokenizer\n");
   
   while(1){
   
