@@ -30,6 +30,7 @@ static char *test_is_valid_character() {
     return 0;
 }
 
+
 static char *test_find_word_start() {
     char *str = "  happy";
     mu_assert("find_word_start('  happy') == &str[2]'", find_word_start(str) == &str[2]);

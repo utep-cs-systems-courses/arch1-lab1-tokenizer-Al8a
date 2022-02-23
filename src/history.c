@@ -29,8 +29,7 @@ int str_len(char *str)
 void add_history(List *list, char *str)
 {
   Item *new_item = (Item*) malloc(sizeof(Item));
-  Item *item = list->root;
-  Item *previous_item;
+  Item *current_item = list->root;
   int index;  
   int str_length =  str_len(str);
 
@@ -38,28 +37,43 @@ void add_history(List *list, char *str)
 
   if(!new_item){
     fprintf(stderr,"Method: add_history\nError: Memory allocation error!");
-    exit(EXIT_FAILURE);
+   exit(EXIT_FAILURE);
   }
   
-  // if history is empty set new_item to head node 
-  if(!item){
+  // if history is empty set new_item to root 
+  if(current_item == NULL){
     list->root = new_item;
     new_item->id = 1;
   }
   
   else{
-
-    index = 0;    
-    while(item){
-      previous_item = item;
-      item = item->next;
+        
+    while(current_item->next != NULL){
+      current_item = current_item->next;
       index++;
     }
-    previous_item->next = new_item;
-    new_item->id = index + 1;
+    current_item->next = new_item;
+    new_item->id = current_item->id + 1;
   }
 }
 
+void reverse_history(List *list){
+
+  Item *current_item = list->root;
+  Item *previous_item = 0;
+  Item *next_item = 0;
+
+  while(current_item != NULL){
+    
+    next_item = current_item->next; // store next
+    current_item->next = previous_item; // reverse current_item's pointer
+
+    // iterate once ahead 
+    previous_item = current_item;
+    current_item = next_item;
+  }
+  list->root = previous_item; 
+}
 
 
 char *get_history(List *list, int id)
@@ -78,16 +92,18 @@ char *get_history(List *list, int id)
 void print_history(List *list)
 {
   Item *current_item = list->root;
+  int counter = 0;
   while(current_item){
 
+    counter++;
+    
     if(current_item->id == 1){
-      printf("[%d] - %s", current_item->id , current_item->str);
+      printf("[%d] - %s", counter, current_item->str);
     }
     else{
-    printf("[%d] - %s", current_item->id, current_item->str);
+    printf("[%d] - %s", counter, current_item->str);
     }
     current_item = current_item->next;
-    
   }
 }
 

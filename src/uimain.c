@@ -7,10 +7,10 @@
 
 // if a '!' is read at user_input[0]
 static void process_input(char *user_input, List *history, int history_length){
-
   // display history
   if(user_input[1] == ' ' || user_input[1] == 'h'){
     printf("\t---- HISTORY ----\n");
+    reverse_history(history);
     print_history(history);
     printf("\t-----------------\n");
   }
