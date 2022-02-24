@@ -4,7 +4,6 @@
 #include "tokenizer.h"
 #define BUFFER_SIZE 300
 
-
 // if a '!' is read at user_input[0]
 static void process_input(char *user_input, List *history, int history_length){
   // display history
