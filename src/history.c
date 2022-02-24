@@ -3,6 +3,8 @@
 #include "history.h"
 #include "tokenizer.h"
 
+
+
 List* init_history()
 {
   List *list = (List*) calloc(1, sizeof(List));
@@ -13,6 +15,7 @@ List* init_history()
   }
   return list;
 }
+
 
 
 int str_len(char *str)
@@ -57,15 +60,16 @@ void add_history(List *list, char *str)
   }
 }
 
-void reverse_history(List *list){
 
+
+void reverse_history(List *list){
   Item *current_item = list->root;
   Item *previous_item = 0;
   Item *next_item = 0;
 
   while(current_item != NULL){
     
-    next_item = current_item->next; // store next
+    next_item = current_item->next;     // store next
     current_item->next = previous_item; // reverse current_item's pointer
 
     // iterate once ahead 
@@ -74,6 +78,7 @@ void reverse_history(List *list){
   }
   list->root = previous_item; 
 }
+
 
 
 char *get_history(List *list, int id)
@@ -107,6 +112,8 @@ void print_history(List *list)
   }
 }
 
+
+
 void free_history(List *list)
 {
   Item *current_item = list->root;
@@ -121,4 +128,3 @@ void free_history(List *list)
   }
   free(list);                // free linked-list
 } 
-
