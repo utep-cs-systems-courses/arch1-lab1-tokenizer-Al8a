@@ -8,7 +8,7 @@ Build expirence and familiarity with pointers, and also to achieve and demonstra
 - Use of program command-line driver development tools including an edtior, c compiler, make, and git.
 - Concepts described in chapters 5-7 of Kernigham & Ritchie's "C Programming Language" such as
   - Declaration and use of pointers.
-  - Ability to initalize and use structs.
+  - Ability to initialize and use structs.
   - Take and store user input using macros and character arrays.
   -  Grasp of pointer arithmetic  
 
